@@ -89,6 +89,11 @@ func Provider() terraform.ResourceProvider {
 			"bizflycloud_dns":                              resourceBizFlyCloudDNS(),
 			"bizflycloud_wan_ip":                           resourceBizFlyCloudWanIP(),
 			"bizflycloud_scheduled_volume_backup":          resourceBizflyCloudScheduledVolumeBackup(),
+			"bizflycloud_cloud_database_instance":          resourceBizFlyCloudDatabaseInstance(),
+			"bizflycloud_cloud_database_node":              resourceBizFlyCloudDatabaseNode(),
+			"bizflycloud_cloud_database_schedule":          resourceBizFlyCloudDatabaseSchedule(),
+			"bizflycloud_cloud_database_backup":            resourceBizFlyCloudDatabaseBackup(),
+			"bizflycloud_cloud_database_configuration":     resourceBizFlyCloudDatabaseConfiguration(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"bizflycloud_image":                            datasourceBizFlyCloudImages(),
@@ -101,6 +106,11 @@ func Provider() terraform.ResourceProvider {
 			"bizflycloud_autoscaling_nodes":                datasourceBizFlyCloudAutoscalingNodes(),
 			"bizflycloud_ssh_key":                          dataSourceBizflyClouldSSHKey(),
 			"bizflycloud_wan_ip":                           dataSourceBizflyCloudWanIP(),
+			"bizflycloud_cloud_database_instance":          datasourceBizFlyCloudDatabaseInstance(),
+			"bizflycloud_cloud_database_node":              datasourceBizFlyCloudDatabaseNode(),
+			"bizflycloud_cloud_database_schedule":          datasourceBizFlyCloudDatabaseSchedule(),
+			"bizflycloud_cloud_database_backup":            datasourceBizFlyCloudDatabaseBackup(),
+			"bizflycloud_cloud_database_configuration":     datasourceBizFlyCloudDatabaseConfiguration(),
 		},
 	}
 	p.ConfigureFunc = func(d *schema.ResourceData) (interface{}, error) {
