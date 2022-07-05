@@ -393,7 +393,7 @@ func deleteCloudDatabaseNodeStateRefreshFunc(d *schema.ResourceData, meta interf
 		ins, err := client.CloudDatabase.Nodes().Get(context.Background(), d.Id())
 
 		if errors.Is(err, gobizfly.ErrNotFound) {
-			return ins, "success", nil
+			return ins, "true", nil
 		} else if err != nil {
 			return nil, "", err
 		}

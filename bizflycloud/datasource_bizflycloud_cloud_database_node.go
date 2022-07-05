@@ -20,6 +20,7 @@ package bizflycloud
 import (
 	"context"
 	"fmt"
+	"github.com/bizflycloud/gobizfly"
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -54,15 +55,32 @@ func dataSourceBizFlyCloudDatabaseNodeRead(d *schema.ResourceData, meta interfac
 
 	d.SetId(node.ID)
 	_ = d.Set("status", node.Status)
-	_ = d.Set("addresses", node.Addresses)
 	_ = d.Set("availability_zone", node.AvailabilityZone)
 	_ = d.Set("created_at", node.CreatedAt)
-	_ = d.Set("datastore", node.Datastore)
 	_ = d.Set("description", node.Description)
-	_ = d.Set("dns", node.DNS)
 	_ = d.Set("region_name", node.RegionName)
-	_ = d.Set("status", node.Status)
 	_ = d.Set("volume_size", node.Volume.Size)
 
+	if err := d.Set("dns", ConvertStruct(node.DNS)); err != nil {
+		return fmt.Errorf("error setting dns for node %s: %s", d.Id(), err)
+	}
+	if err := d.Set("datastore", ConvertStruct(node.Datastore)); err != nil {
+		return fmt.Errorf("error setting datastore for node %s: %s", d.Id(), err)
+	}
+	if err := d.Set("private_addresses", flatternCloudDatabaseAddresses(node.Addresses.Private)); err != nil {
+		return fmt.Errorf("error setting private_addresses for node %s: %s", d.Id(), err)
+	}
+	if err := d.Set("public_addresses", flatternCloudDatabaseAddresses(node.Addresses.Public)); err != nil {
+		return fmt.Errorf("error setting public_addresses for node %s: %s", d.Id(), err)
+	}
+
 	return nil
+}
+
+func flatternCloudDatabaseAddresses(addresses []gobizfly.CloudDatabaseAddressesDetail) *schema.Set {
+	flatternAddresses := schema.NewSet(schema.HashString, []interface{}{})
+	for _, address := range addresses {
+		flatternAddresses.Add(address.IPAddress)
+	}
+	return flatternAddresses
 }

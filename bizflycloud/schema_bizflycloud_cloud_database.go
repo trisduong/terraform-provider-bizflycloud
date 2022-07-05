@@ -110,6 +110,13 @@ func resourceCloudDatabaseInstanceSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
+		"dns": {
+			Type:     schema.TypeMap,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
 	}
 }
 
@@ -144,8 +151,14 @@ func resourceCloudDatabaseNodeSchema() map[string]*schema.Schema {
 				"replica",
 			}, false),
 		},
-		"addresses": {
-			Type:     schema.TypeMap,
+		"private_addresses": {
+			Type:     schema.TypeSet,
+			Elem:     &schema.Schema{Type: schema.TypeString},
+			Computed: true,
+		},
+		"public_addresses": {
+			Type:     schema.TypeSet,
+			Elem:     &schema.Schema{Type: schema.TypeString},
 			Computed: true,
 		},
 		"availability_zone": {
@@ -157,7 +170,7 @@ func resourceCloudDatabaseNodeSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"datastore": {
-			Type:     schema.TypeString,
+			Type:     schema.TypeMap,
 			Computed: true,
 		},
 		"description": {
@@ -218,7 +231,7 @@ func resourceCloudDatabaseBackupSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"datastore": {
-			Type:     schema.TypeString,
+			Type:     schema.TypeMap,
 			Computed: true,
 		},
 		"description": {

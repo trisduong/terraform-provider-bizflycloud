@@ -54,12 +54,14 @@ func dataSourceBizFlyCloudDatabaseBackupRead(d *schema.ResourceData, meta interf
 	d.SetId(backup.ID)
 	_ = d.Set("status", backup.Status)
 	_ = d.Set("created", backup.Created)
-	_ = d.Set("datastore", backup.Datastore)
 	_ = d.Set("description", backup.Description)
 	_ = d.Set("project_id", backup.ProjectID)
 	_ = d.Set("size", backup.Size)
 	_ = d.Set("type", backup.Type)
 	_ = d.Set("updated", backup.Updated)
 
+	if err := d.Set("datastore", ConvertStruct(backup.Datastore)); err != nil {
+		return fmt.Errorf("error setting datastore for instance %s: %s", d.Id(), err)
+	}
 	return nil
 }

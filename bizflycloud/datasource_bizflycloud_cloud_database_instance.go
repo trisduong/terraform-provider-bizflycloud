@@ -19,6 +19,7 @@ package bizflycloud
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -55,5 +56,16 @@ func dataSourceBizFlyCloudDatabaseInstanceRead(d *schema.ResourceData, meta inte
 	d.SetId(instance.ID)
 	_ = d.Set("status", instance.Status)
 
+	if err := d.Set("dns", ConvertStruct(instance.DNS)); err != nil {
+		return fmt.Errorf("error setting dns for instance %s: %s", d.Id(), err)
+	}
+
 	return nil
+}
+
+func ConvertStruct(structData interface{}) map[string]interface{} {
+	var mapData map[string]interface{}
+	data, _ := json.Marshal(structData)
+	json.Unmarshal(data, &mapData)
+	return mapData
 }
